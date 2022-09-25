@@ -69,3 +69,9 @@ class DeleteView(LoginRequiredMixin, DeleteView):
     model = Task
     context_object_name = 'task'
     success_url = reverse_lazy('tasks')
+
+    def get(self, *args, **kwargs):
+        if not self.request.user.is_superuser:
+            return redirect('Sorry, you are not authorized to perform this action, please login as admin to override')
+    # If it is an admin continue with delete
+        return super().get('success_url', *args, **kwargs)
